@@ -1,10 +1,11 @@
-
-
 const router = require("express").Router();
-const stripe = require("stripe")("sk_test_51P1l2eSHixY5uWObT9uOfeR541vZrYVdN2N45tCVRIl5ABM1FlRNFMl5FxkwnI3kfFf6VqenulG5qAlvvnV5rIOn00ppEP5tKi"
-);
+const dotenv = require('dotenv');
+dotenv.config();
+const KEY = process.env.STRIPE_KEY
+const stripe = require("stripe")(KEY);
 
 router.post("/payment", async (req, res) => {
+  
   try {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -15,22 +16,22 @@ router.post("/payment", async (req, res) => {
             product_data: {
               name: 'T-shirt', // Change this to your product name
             },
-            unit_amount: req.body.amount, // Make sure this is in cents
+            unit_amount: req.body.amount, 
           },
           quantity: 1,
         },
       ],
+      billing_address_collection: 'required',
       mode: 'payment',
-      success_url: 'http://localhost:3000/success', // Change this to your success URL
-      cancel_url: 'http://localhost:3000/cancel', // Change this to your cancel URL
+      success_url: 'http://localhost:3000/success',
+      cancel_url: 'http://localhost:3000/cancel'
     });
 
-    res.json({ sessionId: session.id });
+    res.status(200).json({ sessionId: session.id });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'An error occurred during payment processing' });
   }
 });
-
 
 module.exports = router;
