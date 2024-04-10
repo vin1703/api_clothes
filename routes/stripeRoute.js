@@ -23,8 +23,8 @@ router.post("/payment", async (req, res) => {
       ],
       billing_address_collection: 'required',
       mode: 'payment',
-      success_url: 'http://localhost:3000/success',
-      cancel_url: 'http://localhost:3000/cancel'
+      success_url: 'https://ecomclothing.onrender.com/success',
+      cancel_url: 'https://ecomclothing.onrender.com/cancel'
     });
 
     res.status(200).json({ sessionId: session.id });
