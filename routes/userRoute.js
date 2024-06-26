@@ -72,10 +72,12 @@ router.get("/", verifyTokenAndAdmin, async (req, res) => {
             total: { $sum: 1 },
           },
         },
+        { $sort: { _id: 1 } } // Add this stage to sort by _id in ascending order
       ]);
-      res.status(200).json(data)
+      res.status(200).json(data);
     } catch (err) {
       res.status(500).json(err);
     }
   });
+  
 module.exports = router;
